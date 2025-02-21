@@ -1,4 +1,5 @@
 
+import Link from 'next/link';
 import React from 'react';
 
 function Page() {
@@ -58,12 +59,15 @@ function Page() {
             </div>
 
             <div>
-              <button
+             <Link href="/home">
+             <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>
+             </Link>
+              
             </div>
           </form>
 

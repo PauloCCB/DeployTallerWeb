@@ -2,7 +2,7 @@ import React from 'react'
 
 function page() {
   return (
-    <div>Algo</div>
+    <div className='text-black'>Este es el home</div>
   )
 }
 
