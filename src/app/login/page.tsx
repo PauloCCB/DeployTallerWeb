@@ -1,6 +1,15 @@
+"use client"
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function Page() {
+    const router=useRouter();
+    const handleLogin = (e:any) => {
+        e.preventDefault();
+        // Aquí puedes agregar la lógica de autenticación
+        router.push("/panel"); // Redirige a la página deseada
+    };
+
     return (
         <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -15,7 +24,7 @@ function Page() {
             </div>
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form className="space-y-6" action="#" method="POST">
+                <form className="space-y-6" action="#" method="POST" onSubmit={handleLogin}>
                     <div>
                         <label
                             htmlFor="email"
