@@ -9,14 +9,13 @@ export default function Home() {
       {/* Encabezado */}
       <header className="bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+               {/* Logo */}
           <div className="flex items-center gap-2">
             <img src="/logo.png" alt="Escuela Virtual" width={80} height={40} />
             <span className="text-center align-middle text-xl font-bold ml-2 text-blue-600">
               Yachachiq
             </span>
           </div>
-          {/* Logo */}
-
           {/* Botón de Inicio de Sesión */}
           <Link href="/login">
             <button className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-500 transition">
@@ -159,39 +158,38 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">About Us</h3>
+              <h3 className="text-lg font-semibold mb-4">Sobre nosotros</h3>
               <p className="text-gray-400">
-                EduPlatform is dedicated to providing high-quality video courses
-                to students worldwide.
+              Yachachiq se dedica a ofrecer cursos en vídeo de alta calidad a estudiantes de todo el mundo.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+              <h3 className="text-lg font-semibold mb-4">Links rapidos</h3>
               <ul className="space-y-2">
                 <li>
                   <a href="#" className="text-gray-400 hover:text-white">
-                    Courses
+                    Cursos
                   </a>
                 </li>
                 <li>
                   <a href="#" className="text-gray-400 hover:text-white">
-                    About
+                    Nosotros
                   </a>
                 </li>
                 <li>
                   <a href="#" className="text-gray-400 hover:text-white">
-                    Contact
+                    Contacto
                   </a>
                 </li>
                 <li>
                   <a href="#" className="text-gray-400 hover:text-white">
-                    Privacy Policy
+                    Politica de privacidad
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-4">Connect With Us</h3>
+              <h3 className="text-lg font-semibold mb-4">Contacta con nosotros</h3>
               <div className="flex space-x-4">
                 {/* Add social media icons here */}
               </div>

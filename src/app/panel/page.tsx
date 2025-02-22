@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Search, Bell, User, LogOut } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 
 const courses = [
@@ -14,36 +15,43 @@ const courses = [
     title: "Introducción a las matematicas",
     category: "Matematicas",
     image: "/matematicas.png?height=180&width=320&text=Matematicas",
+    path:"/panel/matematica"
   },
   {
     id: 2,
     title: "Introducción a la programación",
     category: "Programación",
     image: "/programacion.jpeg?height=180&width=320&text=Programacion",
+    path:"/panel/programacion"
   },
   {
     id: 3,
     title: "Ingles",
     category: "Ingles",
     image: "/ingles.jpg?height=180&width=320&text=Ingles",
+    path:"/panel/ingles"
   },
   {
     id: 4,
     title: "Introducción a la química",
     category: "Química",
     image: "/quimica.jpeg?height=180&width=320&text=Quimica",
+    path:"/panel/quimica"
   },
   {
     id: 5,
     title: "Introducción a la Física",
     category: "Fisica",
     image: "/fisica.png?height=150&width=2800&text=Machine+Learning",
+    path:"/panel/fisica"
   },
   {
     id: 6,
     title: "Introducción a la Geografía",
     category: "Geografía",
     image: "/geografia.jpeg?height=180&width=320&text=JavaScript",
+    path:"/panel/geografia"
+  
   },
 ]
 
@@ -52,6 +60,7 @@ const categories = ["Todo", "Matematicas","Química", "Programación", "Ingles",
 export default function Dashboard() {
   const [selectedCategory, setSelectedCategory] = useState("Todo")
   const [searchQuery, setSearchQuery] = useState("")
+  const router=useRouter();
 
   const filteredCourses = courses.filter(
     (course) =>
@@ -59,6 +68,13 @@ export default function Dashboard() {
       course.title.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
+  const handleExit= ()=>{
+    router.push("/") // 
+  }
+
+  const handleContinueLearning = (coursePath: string) => {
+    router.push(coursePath)
+  }
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow-sm">
@@ -75,7 +91,7 @@ export default function Dashboard() {
               <Button variant="ghost" size="icon">
                 <User className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" onClick={handleExit}>
                 <LogOut className="h-5 w-5" />
               </Button>
             </div>
@@ -135,7 +151,7 @@ export default function Dashboard() {
                     <CardDescription>{course.category}</CardDescription>
                   </CardContent>
                   <CardFooter>
-                    <Button className="w-full">Continuar aprendiendo</Button>
+                    <Button className="w-full" onClick={()=>handleContinueLearning(course?.path)}>Continuar aprendiendo</Button>
                   </CardFooter>
                 </Card>
               ))}

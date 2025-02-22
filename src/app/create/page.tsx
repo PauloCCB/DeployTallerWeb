@@ -41,6 +41,10 @@ export default function RegisterPage() {
     router.push("/login")
   }
 
+  const handleLogin = ()=>{
+    router.push("/login")
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <Card className="w-full max-w-2xl">
@@ -112,7 +116,7 @@ export default function RegisterPage() {
             )}
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" onClick={handleLogin}>
               Registrarse
             </Button>
           </CardFooter>
