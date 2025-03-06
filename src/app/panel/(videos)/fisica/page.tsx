@@ -3,10 +3,60 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, ArrowRight, RefreshCcw, Maximize2, Download } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function FisicaPage() {
   const router = useRouter()
+const [id, setId] = useState<number>(6);
+  const [video, setVideo] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
 
+  // Obtener token y asegurarse de que esté disponible antes de hacer la petición
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    } else {
+      console.log("No se pudo obtener el token", storedToken);
+      router.push("/login");
+    }
+  }, [router]);
+
+  // Llamar a la API solo cuando el token esté disponible
+  useEffect(() => {
+    if (!token) return; // No ejecutar si el token aún no está disponible
+
+    const fetchVideo = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `http://localhost:8080/api/contenidos/${id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("No se pudo obtener el contenido");
+        }
+
+        const data = await response.json();
+        console.log("Esta es la data", data);
+        setVideo(data.url);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVideo();
+  }, [token, id]); // Ahora `fetchVideo` se ejecuta solo cuando el token está definido
   return (
     <div className="min-h-screen flex flex-col">
       {/* Top Navigation Bar */}
@@ -42,7 +92,7 @@ export default function FisicaPage() {
           <div className="aspect-video bg-black relative flex items-center justify-center">
           <iframe
               className="w-full h-full"
-              src="https://www.youtube.com/embed/gbR6rcG1D-g"
+              src={video}
               title="YouTube Video Player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

@@ -1,87 +1,112 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Search, Bell, User, LogOut } from "lucide-react"
-import { useRouter } from "next/navigation"
-
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Search, Bell, User, LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const courses = [
   {
     id: 1,
-    title: "Introducción a las matematicas",
-    category: "Matematicas",
-    image: "/matematicas.png?height=180&width=320&text=Matematicas",
-    path:"/panel/matematica"
-  },
-  {
-    id: 2,
     title: "Introducción a la programación",
     category: "Programación",
     image: "/programacion.jpeg?height=180&width=320&text=Programacion",
-    path:"/panel/programacion"
+    path: "/panel/programacion/",
+  },
+  {
+    id: 2,
+    title: "Introducción a las matematicas",
+    category: "Matematicas",
+    image: "/matematicas.png?height=180&width=320&text=Matematicas",
+    path: "/panel/matematica",
   },
   {
     id: 3,
     title: "Ingles",
     category: "Ingles",
     image: "/ingles.jpg?height=180&width=320&text=Ingles",
-    path:"/panel/ingles"
-  },
-  {
-    id: 4,
-    title: "Introducción a la química",
-    category: "Química",
-    image: "/quimica.jpeg?height=180&width=320&text=Quimica",
-    path:"/panel/quimica"
+    path: "/panel/ingles",
   },
   {
     id: 5,
-    title: "Introducción a la Física",
-    category: "Fisica",
-    image: "/fisica.png?height=150&width=2800&text=Machine+Learning",
-    path:"/panel/fisica"
+    title: "Introducción a la química",
+    category: "Química",
+    image: "/quimica.jpeg?height=180&width=320&text=Quimica",
+    path: "/panel/quimica",
   },
   {
     id: 6,
-    title: "Introducción a la Geografía",
-    category: "Geografía",
-    image: "/geografia.jpeg?height=180&width=320&text=JavaScript",
-    path:"/panel/geografia"
-  
+    title: "Introducción a la Física",
+    category: "Fisica",
+    image: "/fisica.png?height=150&width=2800&text=Machine+Learning",
+    path: "/panel/fisica",
   },
-]
+];
 
-const categories = ["Todo", "Matematicas","Química", "Programación", "Ingles", "Fisica", "Geografía"]
+const categories = [
+  "Todo",
+  "Matematicas",
+  "Química",
+  "Programación",
+  "Ingles",
+  "Fisica",
+];
 
 export default function Dashboard() {
-  const [selectedCategory, setSelectedCategory] = useState("Todo")
-  const [searchQuery, setSearchQuery] = useState("")
-  const router=useRouter();
+  const [selectedCategory, setSelectedCategory] = useState("Todo");
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    } else {
+      console.log("No se pudo obtener el token", storedToken);
+      router.push("/login");
+    }
+  }, [router]);
 
   const filteredCourses = courses.filter(
     (course) =>
       (selectedCategory === "Todo" || course.category === selectedCategory) &&
-      course.title.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+      course.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const handleExit= ()=>{
-    router.push("/") // 
-  }
+  const handleExit = () => {
+    localStorage.removeItem("token")
+    router.push("/"); //
+  };
 
-  const handleContinueLearning = (coursePath: string) => {
-    router.push(coursePath)
-  }
+  const handleContinueLearning = (coursePath: string,id:number) => {
+    router.push(coursePath);
+  };
+
+
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <Image  src="/logo.png" alt="Escuela Virtual" width={32} height={32} className="mr-2" />
+              <Image
+                src="/logo.png"
+                alt="Escuela Virtual"
+                width={32}
+                height={32}
+                className="mr-2"
+              />
               <span className="text-xl font-bold text-blue-600">Yachachiq</span>
             </div>
             <div className="flex items-center space-x-4 text-black">
@@ -108,7 +133,9 @@ export default function Dashboard() {
                 {categories.map((category) => (
                   <Button
                     key={category}
-                    variant={selectedCategory === category ? "default" : "outline"}
+                    variant={
+                      selectedCategory === category ? "default" : "outline"
+                    }
                     className="w-full justify-start"
                     onClick={() => setSelectedCategory(category)}
                   >
@@ -136,7 +163,10 @@ export default function Dashboard() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredCourses.map((course) => (
-                <Card key={course.id}  className="flex flex-col justify-between h-full">
+                <Card
+                  key={course.id}
+                  className="flex flex-col justify-between h-full"
+                >
                   <CardHeader>
                     <Image
                       src={course.image || "/placeholder.svg"}
@@ -151,10 +181,15 @@ export default function Dashboard() {
                     <CardDescription>{course.category}</CardDescription>
                   </CardContent>
                   <CardFooter>
-                    <Button className="w-full" onClick={()=>handleContinueLearning(course?.path)}>Continuar aprendiendo</Button>
+                    <Button
+                      className="w-full"
+                      onClick={() => handleContinueLearning(course?.path,course?.id)}
+                    >
+                      Continuar aprendiendo
+                    </Button>
                   </CardFooter>
                 </Card>
-              ))}
+              ))} 
             </div>
 
             {filteredCourses.length === 0 && (
@@ -166,6 +201,5 @@ export default function Dashboard() {
         </div>
       </main>
     </div>
-  )
+  );
 }
-

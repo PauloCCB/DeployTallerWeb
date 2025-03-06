@@ -1,49 +1,54 @@
-"use client"
-import type React from "react"
-
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlertCircle } from "lucide-react"
+"use client";
+import type React from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AlertCircle } from "lucide-react";
 
 export default function RegisterPage() {
-  const [userType, setUserType] = useState("")
-  const [nombres, setNombres] = useState("")
-  const [apellidos, setApellidos] = useState("")
-  const [dni, setDni] = useState("")
-  const [provincia, setProvincia] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const router = useRouter()
+  const [userType, setUserType] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [dni, setDni] = useState<string>(""); // Cambiado a string
+  const [provincia, setProvincia] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
+    e.preventDefault(); // Evita recargar la página
 
-    if (!userType || !nombres || !apellidos || !dni || !provincia || !email || !password) {
-      setError("Todos los campos son obligatorios")
-      return
+    try {
+      const response = await fetch("http://localhost:8080/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          dni,
+          email,
+          password,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error en el registro");
+      }
+
+      // Redirigir a la página de inicio de sesión si el registro fue exitoso
+      router.push("/login");
+    } catch (error: any) {
+      setError(error.message);
     }
-
-    // Here you would typically send a request to your API to register the user
-    // For this example, we'll just simulate a successful registration
-    console.log("Registering user:", { userType, nombres, apellidos, dni, provincia, email, password })
-
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Redirect to login page after successful registration
-    router.push("/login")
-  }
-
-  const handleLogin = ()=>{
-    router.push("/login")
-  }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -70,17 +75,17 @@ export default function RegisterPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="nombres">Nombres</Label>
-                <Input id="nombres" value={nombres} onChange={(e) => setNombres(e.target.value)} required />
+                <Input id="nombres" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="apellidos">Apellidos</Label>
-                <Input id="apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)} required />
+                <Input id="apellidos" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="dni">DNI</Label>
-                <Input id="dni" value={dni} onChange={(e) => setDni(e.target.value)} required />
+                <Input id="dni" type="text" value={dni} onChange={(e) => setDni(e.target.value)} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="provincia">Provincia</Label>
@@ -116,17 +121,12 @@ export default function RegisterPage() {
             )}
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full" onClick={handleLogin}>
+            <Button type="submit" className="w-full">
               Registrarse
             </Button>
           </CardFooter>
         </form>
       </Card>
     </div>
-  )
+  );
 }
-
-
-
-
-
