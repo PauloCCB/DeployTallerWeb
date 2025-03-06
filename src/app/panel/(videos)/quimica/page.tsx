@@ -32,7 +32,7 @@ export default function QuimicaPage() {
         try {
           setLoading(true);
           const response = await fetch(
-            `http://localhost:8080/api/contenidos/${id}`,
+            `https://deploytallerwebbackend.onrender.com/api/contenidos/${id}`,
             {
               method: "GET",
               headers: {
